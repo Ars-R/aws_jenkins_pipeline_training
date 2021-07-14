@@ -1,8 +1,11 @@
 new
 new.pem
-
+new.pub
 .ssh
 .terraform
 .terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.backup
+git
+git.pub
+

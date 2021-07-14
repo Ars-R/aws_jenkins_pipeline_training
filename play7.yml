@@ -1,0 +1,84 @@
+---
+- name: install_server
+  hosts: all
+  become: true
+  
+  tasks:
+  - name: install Apache2
+    apt: name=apache2 update_cache=yes state=latest
+
+- name: install java 8
+  hosts: all
+  become: true
+
+  tasks:
+  - name: installation java 8
+    apt: name=openjdk-8-jre state=latest
+
+- name: install_jenkins
+  hosts: all
+  become: true
+
+  tasks:
+    - name: ensure the jenkins apt repository key is installed
+      apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+      become: yes
+
+    - name: ensure the repository is configured
+      apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+      become: yes
+
+    - name: ensure jenkins is installed
+      apt: name=jenkins update_cache=yes
+      become: yes
+
+    - name: ensure jenkins is running
+      service: name=jenkins state=started
+
+
+- name: web1
+  hosts: web1
+  become: true
+  
+  tasks:
+  - name: Create
+    file:
+        path: "/var/www/html/"
+        state: directory
+        mode: '0755' 
+  
+  - name: Copy index page
+    template:
+      src: "web/files/web1/index.html.j2"     
+      dest: "/var/www/html/index.html"
+    notify: restart-apache  
+  
+  handlers:
+    - name: restart-apache
+      service:
+        name: apache2
+        state: restarted
+
+
+- name: web2
+  hosts: web2
+  become: true
+  
+  tasks:
+  - name: Create
+    file:
+        path: "/var/www/html/"
+        state: directory
+        mode: '0755' 
+  
+  - name: Copy index page
+    template:
+      src: "web/files/web2/index.html.j2"     
+      dest: "/var/www/html/index.html"
+    notify: restart-apache  
+  
+  handlers:
+  - name: restart-apache
+    service:
+      name: apache2
+      state: restarted
