@@ -6,6 +6,5 @@ new.pub
 .terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.backup
-git
-git.pub
+
 
