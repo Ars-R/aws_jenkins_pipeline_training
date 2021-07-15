@@ -150,27 +150,7 @@ resource "aws_instance" "instance" {
     Batch = "5AM"
   }
 }
-# Create instance
-resource "aws_instance" "master" {
-  
-  ami                         = lookup(var.ami, var.aws_region, var.owner)
-  instance_type               = var.instance_type
-  associate_public_ip_address = true
-  vpc_security_group_ids      = [aws_security_group.sg.id]
-  subnet_id                   = aws_subnet.subnet.id
 
-  key_name = aws_key_pair.generated_key.key_name
-
-  #user_data = var.apache
-
-  credit_specification {
-    cpu_credits = "standard"
-  }
-  tags = {
-    Name  = "master"
-    
-  }
-}
 
 # Create gateway
 resource "aws_internet_gateway" "gw" {
@@ -242,7 +222,7 @@ resource "local_file" "hosts" {
       pem  = var.key_name,
       web1 = aws_instance.instance[0].public_dns,
       web2 = aws_instance.instance[1].public_dns,
-      web3 = aws_instance.master.public_dns,
+      web3 = aws_instance.instance[2].public_dns,
       web_ip1 = aws_instance.instance[0].public_ip,
       web_ip2 = aws_instance.instance[1].public_ip
 

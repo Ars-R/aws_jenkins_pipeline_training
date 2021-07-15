@@ -99,7 +99,7 @@ variable "aws_region_az" {
 variable "instance_tags" {
   description = "instance tags"
   type        = list(any)
-  default     = ["vm-1", "vm-2"]
+  default     = ["vm-1", "vm-2", "master"]
 }
 
 variable "instance_type" {
@@ -111,7 +111,7 @@ variable "instance_type" {
 
 variable "count_instance" {
   description = "Counter"
-  default     = "2"
+  default     = "3"
 }
 # Variables for Security Group
 
